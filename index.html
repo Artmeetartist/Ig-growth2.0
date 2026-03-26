@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>OWNIT | The Ultimate Dental Growth Engine</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        darkBg: '#030305',
+                        panelBg: '#0a0a0c',
+                        primary: '#00f2fe',
+                        igOrange: '#f09433',
+                        igRed: '#dc2743',
+                        igPink: '#ff007f', // Updated to Hot Cyber Pink
+                        brandViolet: '#8a2be2',
+                        brand: '#ffffff',
+                        paper: '#ffffff', // Brightened background
+                        ink: '#000000', // Pitch black for maximum contrast
+                        // New Pop Art Palette
+                        neoYellow: '#ccff00',
+                        neoPink: '#ff007f',
+                        neoCyan: '#00ffff',
+                        neoPurple: '#8a2be2',
+                        neoGreen: '#00ff66',
+                        neoOrange: '#ff5500',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Clash Display', 'sans-serif'],
+                        hand: ['Caveat', 'cursive'],
+                    },
+                    animation: {
+                        'blob': 'blob 10s infinite alternate',
+                        'marquee': 'marquee 20s linear infinite', // Sped up slightly
+                        'marquee-reverse': 'marqueeReverse 25s linear infinite',
+                        'ig-pulse': 'igPulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'float-social-1': 'floatSocial 6s ease-in-out infinite', // Faster, more dynamic
+                        'float-social-2': 'floatSocial 8s ease-in-out 2s infinite',
+                        'float-social-3': 'floatSocial 10s ease-in-out 4s infinite',
+                        'float-1': 'float1 2.5s ease-in-out infinite',
+                        'float-2': 'float2 3s ease-in-out infinite',
+                        'float-3': 'float3 2.8s ease-in-out infinite',
+                        'wiggle': 'wiggle 1s ease-in-out infinite',
+                        'spin-slow': 'spin 8s linear infinite',
+                        'pop': 'pop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards',
+                    },
+                    keyframes: {
+                        blob: {
+                            '0%': { transform: 'translate(0px, 0px) scale(1) rotate(0deg)' },
+                            '50%': { transform: 'translate(50px, -80px) scale(1.3) rotate(90deg)' },
+                            '100%': { transform: 'translate(-30px, 40px) scale(0.8) rotate(180deg)' },
+                        },
+                        marquee: {
+                            '0%': { transform: 'translateX(0%)' },
+                            '100%': { transform: 'translateX(-100%)' },
+                        },
+                        marqueeReverse: {
+                            '0%': { transform: 'translateX(-100%)' },
+                            '100%': { transform: 'translateX(0%)' },
+                        },
+                        igPulse: {
+                            '0%, 100%': { opacity: 1, transform: 'scale(1)' },
+                            '50%': { opacity: .8, transform: 'scale(1.1)' },
+                        },
+                        floatSocial: {
+                            '0%': { transform: 'translateY(120px) scale(0.5) rotate(-25deg)', opacity: 0 },
+                            '20%': { opacity: 1, transform: 'translateY(50px) scale(1.2) rotate(10deg)' },
+                            '80%': { opacity: 1, transform: 'translateY(-200px) scale(1.1) rotate(-10deg)' },
+                            '100%': { transform: 'translateY(-350px) scale(1.5) rotate(45deg)', opacity: 0 },
+                        },
+                        float1: { '0%, 100%': { transform: 'translateY(0) rotate(2deg)' }, '50%': { transform: 'translateY(-15px) rotate(-2deg)' } },
+                        float2: { '0%, 100%': { transform: 'translateY(0) rotate(-3deg)' }, '50%': { transform: 'translateY(-20px) rotate(3deg)' } },
+                        float3: { '0%, 100%': { transform: 'translateY(0) rotate(4deg)' }, '50%': { transform: 'translateY(-12px) rotate(-3deg)' } },
+                        wiggle: { '0%, 100%': { transform: 'rotate(-5deg)' }, '50%': { transform: 'rotate(5deg)' } },
+                        pop: { '0%': { transform: 'scale(0.8)' }, '100%': { transform: 'scale(1)' } }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+    <link href="https://api.fontshare.com/v2/css?f[]=clash-display@600,700,800,900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&display=swap" rel="stylesheet">
+    
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #ffffff; /* Bright white base for neo-brutalism */
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.04'/%3E%3C/svg%3E");
+            color: #000000;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        h1, h2, h3, .font-display {
+            font-family: 'Clash Display', sans-serif;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 10px; }
+        ::-webkit-scrollbar-track { background: #ffffff; border-left: 3px solid #000000; }
+        ::-webkit-scrollbar-thumb { background: #000000; border: 2px solid #ffffff; border-radius: 0px; }
+        ::-webkit-scrollbar-thumb:hover { background: #ff007f; border-color: #000000; }
+
+        /* Scribble Pencil Background Mesh */
+        .bg-grid {
+            background-image: linear-gradient(rgba(0, 0, 0, 0.08) 2px, transparent 2px),
+            linear-gradient(90deg, rgba(0, 0, 0, 0.08) 2px, transparent 2px);
+            background-size: 40px 40px; background-position: center center;
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -10; pointer-events: none; transform: translateZ(0);
+        }
+
+        /* Paper Cards - Now Neo-Brutalist */
+        .paper-card {
+            background-color: #ffffff;
+            border: 3px solid #000000;
+            border-radius: 12px; /* Sharper corners for a punchier look */
+            box-shadow: 6px 8px 0px rgba(0,0,0,1);
+            position: relative; overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        .paper-card:hover {
+            transform: translateY(-8px) scale(1.02) rotate(1deg);
+            box-shadow: 12px 16px 0px rgba(0,0,0,1);
+        }
+
+        /* Interactive Buttons */
+        .interactive-btn {
+            background-color: #ffffff; border: 3px solid #000000;
+            border-radius: 8px;
+            box-shadow: 4px 6px 0px #000000;
+            color: #000000; font-weight: 900; text-transform: uppercase; letter-spacing: 0.05em;
+            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: inline-flex; align-items: center; justify-content: center;
+        }
+        .interactive-btn:hover { 
+            transform: translate(-4px, -4px); 
+            box-shadow: 8px 10px 0px #000000; 
+            background-color: #ccff00; /* Electric Lime */
+            color: #000000;
+        }
+        .interactive-btn:active { 
+            transform: translate(2px, 2px); 
+            box-shadow: 0px 0px 0px #000000; 
+        }
+
+        .btn-primary {
+            background-color: #00ffff; /* Cyber Cyan */
+        }
+        .btn-primary:hover {
+            background-color: #ff007f; /* Hot Pink */
+            color: white;
+        }
+
+        /* Highlighter Marker Effect - Neon */
+        .highlighter {
+            background: linear-gradient(104deg, rgba(204,255,0,0) 0.9%, rgba(204,255,0,1) 2.4%, rgba(204,255,0,1) 5.8%, rgba(204,255,0,1) 93%, rgba(204,255,0,0) 96%);
+            padding: 2px 8px; display: inline-block; color: #000; transform: rotate(-1deg);
+            border: 2px solid #000; box-shadow: 3px 3px 0px #000;
+        }
+        .highlighter-pink {
+            background: linear-gradient(104deg, rgba(255,0,127,0) 0.9%, rgba(255,0,127,1) 2.4%, rgba(255,0,127,1) 5.8%, rgba(255,0,127,1) 93%, rgba(255,0,127,0) 96%);
+            padding: 2px 8px; display: inline-block; color: #fff; transform: rotate(1deg);
+            border: 2px solid #000; box-shadow: 3px 3px 0px #000;
+        }
+
+        /* Drawn Shapes */
+        .hand-drawn-circle {
+            border: 3px solid #000000;
+            border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+        }
+
+        /* Post-it / Tape Styles */
+        .tape {
+            position: absolute; width: 45px; height: 16px;
+            background: #ff007f; /* Neon pink tape */
+            border: 2px solid #000; box-shadow: 2px 2px 0px #000;
+            opacity: 0.9;
+        }
+
+        .polaroid {
+            background: white; padding: 12px 12px 35px 12px;
+            box-shadow: 6px 8px 0px #000; border: 3px solid #000000;
+            transform: rotate(-4deg); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .polaroid:hover { transform: rotate(3deg) scale(1.1); z-index: 30; }
+
+        /* Animations */
+        .reveal { opacity: 0; transform: translateY(40px) scale(0.95); transition: all 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275); will-change: opacity, transform; }
+        .reveal.active { opacity: 1; transform: translateY(0) scale(1); }
+        .sketch-path { stroke-dasharray: 15 10; animation: dashMove 15s linear infinite; }
+        @keyframes dashMove { to { stroke-dashoffset: -1000; } }
+        
+        /* Floating Social Icons */
+        .social-bubble {
+            position: absolute; display: flex; align-items: center; justify-content: center;
+            width: 64px; height: 64px; background: white;
+            border: 3px solid #000000; border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+            font-size: 2rem; box-shadow: 4px 6px 0px #000000;
+            z-index: 0; pointer-events: none;
+        }
+
+        /* Glass Nav adapted to Paper */
+        .paper-nav {
+            background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(12px);
+            border-bottom: 3px solid #000000;
+        }
+        
+        .hero-mockup {
+            box-shadow: 12px 16px 0px #000; border: 4px solid #000000;
+            border-radius: 16px;
+        }
+
+        /* Double Tap Heart Animation */
+        .double-tap-heart {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.1);
+            opacity: 0; color: #ff007f; font-size: 8rem; pointer-events: none;
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 0;
+        }
+        .paper-card:hover .double-tap-heart {
+            transform: translate(-50%, -50%) scale(1.2); opacity: 0.15;
+        }
+        
+        /* Perspective Tilt Wrapper */
+        .tilt-wrapper { perspective: 1200px; transform-style: preserve-3d; will-change: transform; }
+        .tilt-element { transition: transform 0.1s ease-out; will-change: transform; }
+    </style>
+</head>
+<body class="antialiased selection:bg-neoPink selection:text-white">
+    
+    <div class="bg-grid"></div>
+
+    <!-- VIBRANT Background blobs (Screen blend for max pop) -->
+    <div class="fixed top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none opacity-80 mix-blend-multiply">
+        <div class="absolute top-[-10%] left-[-10%] w-[60vw] md:w-[40vw] h-[60vw] md:h-[40vw] rounded-full bg-neoCyan blur-[120px] animate-blob"></div>
+        <div class="absolute top-[20%] right-[-10%] w-[50vw] md:w-[30vw] h-[50vw] md:h-[30vw] rounded-full bg-neoYellow blur-[120px] animate-blob" style="animation-delay: -3s;"></div>
+        <div class="absolute bottom-[-20%] left-[20%] w-[70vw] md:w-[50vw] h-[70vw] md:h-[50vw] rounded-full bg-neoPink blur-[140px] animate-blob" style="animation-delay: -6s;"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-50 paper-nav transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-5 md:px-6 py-4 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div class="w-12 h-12 bg-neoYellow border-3 border-black flex items-center justify-center transform -rotate-6 hand-drawn-circle shadow-[3px_3px_0_#000] hover:rotate-12 transition-transform duration-300">
+                    <i class="ph-bold ph-lightning text-black text-2xl animate-pulse"></i>
+                </div>
+                <h1 class="font-display font-black text-3xl tracking-tight text-black mt-1 uppercase">OWNIT</h1>
+            </div>
+            <div class="hidden md:flex items-center gap-8 text-lg font-hand font-bold text-gray-800">
+                <a href="#platform" class="hover:text-neoPink hover:-translate-y-1 transition-all">Platform</a>
+                <a href="#results" class="hover:text-neoCyan hover:-translate-y-1 transition-all">Results</a>
+                <a href="#process" class="hover:text-neoPurple hover:-translate-y-1 transition-all">How We Work</a>
+                <a href="#pricing" class="hover:text-neoOrange hover:-translate-y-1 transition-all">Pricing</a>
+            </div>
+            <div class="flex items-center gap-5">
+                <a href="#" class="hidden md:flex items-center gap-2 text-xl font-hand font-bold text-black hover:text-neoGreen transition-colors group">
+                    <div class="w-8 h-8 rounded-full bg-neoGreen border-2 border-black flex items-center justify-center group-hover:scale-110 transition-transform">
+                        <i class="ph-fill ph-whatsapp-logo text-black text-lg"></i>
+                    </div> 
+                    Contact
+                </a>
+                <a href="#pricing" class="interactive-btn btn-primary px-6 md:px-8 py-2.5 group">
+                    <span class="font-display font-black text-lg relative z-10 tracking-wide">GET ACCESS</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative pt-36 md:pt-48 pb-20 px-5 md:px-6 max-w-7xl mx-auto flex flex-col items-center z-10 min-h-[95vh] justify-center">
+        
+        <!-- Floating Social Bubbles (Electric) -->
+        <div class="social-bubble animate-float-social-1 left-[5%] bg-neoPink text-white border-4"><i class="ph-bold ph-heart"></i></div>
+        <div class="social-bubble animate-float-social-2 right-[8%] bg-neoCyan text-black border-4"><i class="ph-bold ph-chat-circle-text"></i></div>
+        <div class="social-bubble animate-float-social-3 left-[15%] bg-neoYellow text-black border-4"><i class="ph-bold ph-trend-up"></i></div>
+
+        <!-- Creator "Sticker" Badge -->
+        <div class="absolute -top-10 md:-top-16 left-[5%] md:left-[20%] rotate-[-12deg] z-20 pointer-events-none hidden sm:block animate-float-1">
+            <div class="px-5 py-3 bg-neoPurple text-white font-display uppercase tracking-widest text-xl font-black shadow-[6px_6px_0_#000] border-3 border-black">
+                <div class="tape -top-3 right-4 rotate-6 bg-neoYellow"></div>
+                💥 1M+ VIEWS WAITING
+            </div>
+        </div>
+
+        <div class="inline-flex items-center gap-3 px-5 py-2 bg-black border-3 border-black text-white text-sm font-display font-bold uppercase tracking-widest mb-8 md:mb-10 reveal shadow-[4px_4px_0_#ccff00] transform -rotate-2 hover:rotate-0 transition-transform cursor-pointer">
+            <span class="w-3 h-3 rounded-full bg-neoGreen border-2 border-black animate-ping flex-shrink-0"></span>
+            <span>DentalClinic Growth OS is now <span class="text-neoYellow">OWNIT</span></span>
+        </div>
+        
+        <div class="text-center max-w-5xl reveal w-full relative" style="transition-delay: 0.1s;">
+            
+            <!-- Hand-drawn Annotation -->
+            <div class="absolute -right-4 md:-right-16 -top-8 rotate-12 z-20 hidden md:block animate-wiggle">
+                <span class="font-hand text-5xl text-neoPink font-black drop-shadow-[2px_2px_0_#000]">#VIRAL</span>
+                <svg class="w-16 h-16 text-neoPink -ml-2 mt-1 drop-shadow-[2px_2px_0_#000]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </div>
+
+            <h1 class="text-6xl sm:text-7xl md:text-[6.5rem] font-display font-black text-black tracking-tight mb-6 md:mb-8 leading-[1.05] md:leading-[1.05]">
+                STOP <span id="changing-text" class="text-transparent text-stroke stroke-black uppercase" style="-webkit-text-stroke: 2px black;">MARKETING.</span><br>START <span class="highlighter">OWNING</span> YOUR GROWTH.
+            </h1>
+            <p class="text-xl sm:text-2xl md:text-3xl font-hand text-gray-800 mb-12 max-w-3xl mx-auto font-bold leading-relaxed px-4 md:px-0">
+                The AI-powered OS that turns your Instagram into an automated booking machine. Generate <span class="bg-neoYellow px-2 border-2 border-black transform rotate-2 inline-block shadow-[2px_2px_0_#000]">100k+ local followers</span> and daily patients.
+            </p>
+            
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-6 mb-20 md:mb-24 w-full px-4 sm:px-0">
+                <a href="#pricing" class="interactive-btn btn-primary w-full sm:w-auto px-10 py-4 text-xl font-display uppercase">
+                    START SCALING NOW <i class="ph-bold ph-rocket-launch ml-3 text-2xl"></i>
+                </a>
+                <a href="#" class="interactive-btn w-full sm:w-auto px-10 py-4 text-xl font-display uppercase bg-neoPink text-white hover:!bg-neoCyan hover:!text-black">
+                    <i class="ph-fill ph-play-circle mr-3 text-2xl"></i> WATCH DEMO
+                </a>
+            </div>
+        </div>
+
+        <!-- 3D Interactive Mockup (Neo-Brutalist) -->
+        <div class="w-full max-w-6xl tilt-wrapper reveal" style="transition-delay: 0.2s;">
+            <div class="tilt-element w-full md:aspect-[16/9] bg-white hero-mockup overflow-hidden relative group">
+                <!-- Mockup Header -->
+                <div class="h-14 border-b-4 border-black flex items-center px-5 gap-3 bg-neoPurple">
+                    <div class="flex gap-2">
+                        <div class="w-4 h-4 rounded-full border-2 border-black bg-neoPink shadow-[1px_1px_0_#000]"></div>
+                        <div class="w-4 h-4 rounded-full border-2 border-black bg-neoYellow shadow-[1px_1px_0_#000]"></div>
+                        <div class="w-4 h-4 rounded-full border-2 border-black bg-neoGreen shadow-[1px_1px_0_#000]"></div>
+                    </div>
+                    <div class="mx-auto px-12 py-1.5 bg-white border-3 border-black text-sm font-display font-black uppercase tracking-widest text-black truncate max-w-[250px] md:max-w-none text-center shadow-[3px_3px_0_#000] transform rotate-1">OWNIT24.COM / DASHBOARD</div>
+                </div>
+                <!-- Mockup Content -->
+                <div class="p-6 md:p-10 flex flex-col md:grid md:grid-cols-3 gap-8 h-full relative bg-[#fafafa]">
+                    
+                    <div class="md:col-span-2 space-y-8">
+                        <div class="flex flex-col sm:flex-row sm:justify-between sm:items-end gap-6">
+                            <div>
+                                <h3 class="font-display text-4xl text-black font-black cursor-default hover:text-neoPink transition-colors uppercase">Creator Hub</h3>
+                                <div class="flex items-center gap-3 mt-3">
+                                    <span class="px-4 py-1.5 bg-neoGreen border-3 border-black text-sm font-black font-display uppercase tracking-widest text-black shadow-[3px_3px_0_#000] flex items-center gap-2 cursor-pointer hover:bg-white transition-colors transform -rotate-2"><span class="w-3 h-3 rounded-full bg-black animate-ping"></span> SYSTEM LIVE</span>
+                                </div>
+                            </div>
+                            <div class="flex gap-4 text-xl font-display font-black text-black bg-white border-3 border-black p-3 shadow-[4px_4px_0_#000] sm:bg-transparent sm:border-none sm:shadow-none sm:p-0 cursor-pointer hover:scale-105 transition-transform duration-300 origin-right">
+                                <div class="relative"><div class="highlighter !bg-neoYellow"> <span class="text-black">+1,240</span> FLWRS</div></div>
+                                <div class="relative"><div class="highlighter !bg-neoCyan"> <span class="text-black">+12</span> BOOKED</div></div>
+                            </div>
+                        </div>
+                        
+                        <div class="h-40 md:h-52 w-full bg-white border-4 border-black shadow-[6px_6px_0_#000] rounded-xl relative overflow-hidden flex items-end group/chart cursor-pointer">
+                            <!-- Animated Marker Chart -->
+                            <svg class="absolute bottom-0 w-full h-full text-neoPink group-hover/chart:text-neoPurple transition-colors duration-500" preserveAspectRatio="none" viewBox="0 0 100 100">
+                                <defs>
+                                    <linearGradient id="heroGradientGlow" x1="0" y1="0" x2="0" y2="1">
+                                        <stop offset="0%" stop-color="currentColor" stop-opacity="0.4"/>
+                                        <stop offset="100%" stop-color="currentColor" stop-opacity="0"/>
+                                    </linearGradient>
+                                </defs>
+                                <path d="M0,100 L0,80 Q25,60 50,70 T100,20 L100,100 Z" fill="url(#heroGradientGlow)" opacity="0.8" class="animate-pulse"></path>
+                                <path d="M0,80 Q25,60 50,70 T100,20" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" class="chart-line-infinite sketch-path"></path>
+                            </svg>
+                            
+                            <!-- Floating Neo Data Points -->
+                            <div class="absolute bottom-8 left-[10%] bg-neoCyan border-3 border-black text-black text-base px-4 py-1.5 shadow-[4px_4px_0_#000] flex items-center gap-2 animate-float-1 font-display font-black uppercase cursor-pointer hover:scale-110 hover:bg-white transition-all duration-300 z-10 transform -rotate-3">
+                                <i class="ph-bold ph-calendar-check text-xl"></i> +1 APT
+                            </div>
+                            <div class="absolute bottom-16 left-[40%] bg-neoYellow border-3 border-black text-black text-base px-4 py-1.5 shadow-[4px_4px_0_#000] flex items-center gap-2 animate-float-2 font-display font-black uppercase cursor-pointer hover:scale-110 hover:bg-white transition-all duration-300 z-10 transform rotate-6">
+                                <i class="ph-bold ph-lightning text-xl"></i> HOT LEAD
+                            </div>
+                            <div class="absolute bottom-24 right-[15%] bg-neoPink border-3 border-black text-white text-base px-4 py-1.5 shadow-[4px_4px_0_#000] flex items-center gap-2 animate-float-3 font-display font-black uppercase cursor-pointer hover:scale-110 hover:bg-white hover:text-black transition-all duration-300 z-10 transform -rotate-2">
+                                <i class="ph-bold ph-calendar-check text-xl"></i> +1 APT
+                            </div>
+                            
+                            <!-- Overlay on hover -->
+                            <div class="absolute inset-0 bg-black/80 opacity-0 group-hover/chart:opacity-100 transition-opacity duration-300 flex items-center justify-center backdrop-blur-sm z-20">
+                                <span class="bg-neoYellow px-6 py-3 text-2xl text-black border-3 border-black font-display font-black shadow-[6px_6px_0_#000] transform -rotate-3 uppercase">View Analytics 📈</span>
+                            </div>
+                        </div>
+                        
+                        <div class="grid grid-cols-2 gap-6">
+                            <div class="h-24 md:h-28 bg-white border-3 border-black shadow-[5px_5px_0_#000] rounded-xl p-4 md:p-5 flex flex-col justify-between group/reel cursor-pointer transition-all duration-300 transform hover:-translate-y-2 hover:shadow-[8px_8px_0_#000] hover:bg-neoPurple">
+                                <div class="flex justify-between items-start">
+                                    <span class="text-sm md:text-base text-black font-black uppercase tracking-widest font-display leading-tight group-hover/reel:text-white transition-colors">Viral Reel AI</span>
+                                    <span class="text-sm md:text-base text-neoPink font-display font-black opacity-0 group-hover/reel:opacity-100 transition-opacity bg-white px-2 border-2 border-black shadow-[2px_2px_0_#000] rotate-3">RENDERING</span>
+                                </div>
+                                <div class="w-full sm:w-2/3 h-3 md:h-4 bg-white border-2 border-black rounded-full overflow-hidden mt-3 shadow-inner"><div class="w-full h-full bg-neoYellow animate-pulse group-hover/reel:w-full group-hover/reel:bg-neoGreen sm:w-2/3 group-hover/reel:animate-none transition-all duration-1000"></div></div>
+                            </div>
+                            <div class="h-24 md:h-28 bg-white border-3 border-black shadow-[5px_5px_0_#000] rounded-xl p-4 md:p-5 flex flex-col justify-between relative overflow-hidden group/dm cursor-pointer hover:bg-neoCyan transition-all duration-300 transform hover:-translate-y-2 hover:shadow-[8px_8px_0_#000]">
+                                <span class="text-sm md:text-base text-black font-black uppercase tracking-widest z-10 font-display leading-tight">IG DM Auto</span>
+                                <div class="flex items-center gap-2 z-10 mt-auto bg-black text-white w-max px-3 py-1 border-2 border-black shadow-[2px_2px_0_#fff] group-hover/dm:shadow-[2px_2px_0_#000] group-hover/dm:bg-white group-hover/dm:text-black transition-all transform -rotate-2">
+                                    <span class="w-3 h-3 rounded-full bg-neoGreen animate-ping"></span>
+                                    <span class="font-display font-black text-lg md:text-xl uppercase">Active</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="md:col-span-1 border-t-4 md:border-t-0 md:border-l-4 border-black pt-8 md:pt-0 md:pl-8 space-y-5">
+                        <div class="flex justify-between items-center mb-4">
+                            <h4 class="text-base font-display font-black text-black uppercase tracking-widest bg-neoYellow px-2 border-2 border-black shadow-[2px_2px_0_#000] transform rotate-1">Today's Action</h4>
+                        </div>
+                        <div class="p-4 bg-white border-3 border-black shadow-[5px_5px_0_#000] cursor-pointer transition-all duration-300 transform hover:-translate-y-2 hover:shadow-[8px_8px_0_#000] hover:bg-neoPink group">
+                            <div class="w-full h-24 bg-black border-3 border-black mb-3 flex items-center justify-center relative overflow-hidden">
+                                <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4IiBoZWlnaHQ9IjgiPgo8cmVjdCB3aWR0aD0iOCIgaGVpZ2h0PSI4IiBmaWxsPSIjMDAwIj48L3JlY3Q+CjxwYXRoIGQ9Ik0wIDBMOCA4Wk04IDBMMCA4WiIgc3Ryb2tlPSIjMjIyIiBzdHJva2Utd2lkdGg9IjEiPjwvcGF0aD4KPC9zdmc+')] opacity-50"></div>
+                                <i class="ph-fill ph-play-circle text-white text-5xl group-hover:text-neoYellow group-hover:scale-125 transition-all duration-300 relative z-10"></i>
+                            </div>
+                            <div class="h-3 w-full bg-black border border-black mb-2 group-hover:bg-white"></div>
+                            <div class="h-3 w-2/3 bg-black border border-black group-hover:bg-white"></div>
+                        </div>
+                        <div class="hidden md:block p-4 bg-white border-3 border-black border-dashed opacity-60 cursor-pointer hover:opacity-100 hover:border-solid hover:shadow-[5px_5px_0_#000] transition-all duration-300 transform hover:-translate-y-2 hover:bg-neoGreen group">
+                            <div class="flex gap-3 items-center mb-3">
+                                <div class="w-8 h-8 hand-drawn-circle border-2 border-black flex items-center justify-center text-black bg-white group-hover:shadow-[2px_2px_0_#000]"><i class="ph-bold ph-check text-lg"></i></div>
+                                <div class="h-3 w-20 bg-black border border-black group-hover:bg-white"></div>
+                            </div>
+                            <div class="h-3 w-full bg-black border border-black mb-2 group-hover:bg-white"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Electric Marquee Social Proof -->
+    <div class="border-y-4 border-black py-5 bg-neoPurple shadow-[0_6px_0_#000] overflow-hidden flex whitespace-nowrap reveal w-[105vw] transform rotate-1 relative -left-4 z-20">
+        <div class="animate-marquee flex gap-10 md:gap-16 items-center">
+            <!-- Group 1 -->
+            <span class="text-white font-display font-black text-2xl md:text-3xl tracking-widest uppercase" style="text-shadow: 2px 2px 0 #000;">Trusted by 500+ Indian Clinics</span>
+            <i class="ph-bold ph-star text-neoYellow text-3xl md:text-4xl" style="filter: drop-shadow(2px 2px 0 #000);"></i>
+            <span class="text-white font-display font-black text-2xl md:text-3xl tracking-widest uppercase" style="text-shadow: 2px 2px 0 #000;">Zero Ad Spend Required</span>
+            <i class="ph-bold ph-lightning text-neoCyan text-3xl md:text-4xl" style="filter: drop-shadow(2px 2px 0 #000);"></i>
+            <span class="text-white font-display font-black text-2xl md:text-3xl tracking-widest uppercase" style="text-shadow: 2px 2px 0 #000;">Proven 100K+ Systems</span>
+            <i class="ph-bold ph-fire text-neoOrange text-3xl md:text-4xl" style="filter: drop-shadow(2px 2px 0 #000);"></i>
+            
+            <!-- Group 2 -->
+            <span class="text-white font-display font-black text-2xl md:text-3xl tracking-widest uppercase" style="text-shadow: 2px 2px 0 #000;">Trusted by 500+ Indian Clinics</span>
+            <i class="ph-bold ph-star text-neoYellow text-3xl md:text-4xl" style="filter: drop-shadow(2px 2px 0 #000);"></i>
+            <span class="text-white font-display font-black text-2xl md:text-3xl tracking-widest uppercase" style="text-shadow: 2px 2px 0 #000;">Zero Ad Spend Required</span>
+            <i class="ph-bold ph-lightning text-neoCyan text-3xl md:text-4xl" style="filter: drop-shadow(2px 2px 0 #000);"></i>
+            <span class="text-white font-display font-black text-2xl md:text-3xl tracking-widest uppercase" style="text-shadow: 2px 2px 0 #000;">Proven 100K+ Systems</span>
+            <i class="ph-bold ph-fire text-neoOrange text-3xl md:text-4xl" style="filter: drop-shadow(2px 2px 0 #000);"></i>
+        </div>
+    </div>
+
+    <!-- The Results & Reach Explosion Section -->
+    <section id="results" class="py-24 md:py-36 px-5 md:px-6 relative z-10 border-b-4 border-black bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCI+CjxwYXRoIGQ9Ik0yMCAwbDIwIDIwbC0yMCAyMGwtMjAtMjBMMjAgMHoiIGZpbGw9IiNmZmZmZmYiIGZpbGwtb3BhY2l0eT0iMSIvPgo8cGF0aCBkPSJNMjAgMmwxOCAxOGwtMTggMThMMiAyMEwyMCAyeiIgZmlsbD0iI2Y1ZjVmNSIgZmlsbC1vcGFjaXR5PSIxIi8+Cjwvc3ZnPg==')]">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16 md:mb-24 reveal relative">
+                <span class="px-5 py-2 bg-neoCyan border-3 border-black text-black text-lg font-display font-black uppercase tracking-widest mb-6 inline-block shadow-[4px_4px_0_#000] transform -rotate-2 hover:rotate-2 transition-transform">The OWNIT Effect</span>
+                <h2 class="text-5xl md:text-7xl font-display font-black text-black mb-8 leading-tight">EXPLOSIVE REACH.<br> <span class="bg-neoPink text-white px-4 border-4 border-black shadow-[6px_6px_0_#000] inline-block transform rotate-1 mt-2">HIGH-TICKET BOOKINGS.</span></h2>
+                <p class="text-gray-900 font-bold max-w-3xl mx-auto text-xl md:text-2xl font-hand">Watch what happens when you combine viral psychological themes with our automated DM appointment funnels.</p>
+            </div>
+
+            <div id="results-animation-container" class="max-w-6xl mx-auto paper-card p-8 md:p-14 reveal flex flex-col lg:flex-row items-center gap-12 bg-white">
+                
+                <!-- Left: Animated Chart & Reach -->
+                <div class="flex-1 w-full relative h-80 md:h-96 bg-black border-4 border-black shadow-[8px_8px_0_#ccff00] flex flex-col justify-end p-6 overflow-hidden rounded-xl">
+                    
+                    <div class="absolute top-8 left-8 z-10">
+                        <p class="text-neoCyan text-sm font-display font-black uppercase tracking-widest mb-2">Instagram Reach</p>
+                        <div class="flex items-baseline gap-4">
+                            <span class="text-6xl md:text-7xl font-display font-black text-white" id="reach-counter">2,140</span>
+                            <span class="text-black text-sm font-black font-display uppercase flex items-center bg-neoYellow px-3 py-1.5 border-2 border-black shadow-[3px_3px_0_#fff] transform -rotate-3 animate-bounce"><i class="ph-bold ph-rocket-launch mr-2 text-lg"></i> BOOM</span>
+                        </div>
+                    </div>
+
+                    <!-- Glowing Chart -->
+                    <svg class="absolute bottom-0 w-full h-full text-neoCyan drop-shadow-[0_0_15px_rgba(0,255,255,0.8)]" preserveAspectRatio="none" viewBox="0 0 400 200">
+                        <path d="M0,180 C100,180 150,180 200,160 C250,140 300,40 400,20" fill="url(#heroGradientGlow)" opacity="0.4"></path>
+                        <path d="M0,180 C100,180 150,180 200,160 C250,140 300,40 400,20" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round" class="chart-path sketch-path"></path>
+                    </svg>
+                </div>
+
+                <!-- Right: Cascading Bookings -->
+                <div class="flex-1 w-full flex flex-col gap-5 relative justify-center">
+                    <p class="text-black text-sm font-display font-black uppercase tracking-widest pl-2 mb-2 inline-block bg-neoPink text-white px-4 py-1.5 border-3 border-black shadow-[4px_4px_0_#000] self-start transform rotate-2">Automated DM Inbox</p>
+                    
+                    <div class="paper-card !bg-[#f8f9fa] p-5 md:p-6 flex items-center gap-5 hover:-translate-y-2 hover:!bg-neoYellow transition-all cursor-pointer group">
+                        <div class="w-14 h-14 hand-drawn-circle bg-white flex flex-shrink-0 items-center justify-center border-3 group-hover:bg-black group-hover:text-neoYellow transition-colors">
+                            <i class="ph-bold ph-calendar-plus text-black text-3xl group-hover:text-neoYellow"></i>
+                        </div>
+                        <div>
+                            <p class="text-black font-display font-black text-2xl leading-none mb-2 uppercase">New Booking: Clear Aligners</p>
+                            <p class="text-gray-800 text-base font-bold font-hand">Confirmed via IG Automation • <span class="font-black text-black bg-white px-2 border-2 border-black rotate-2 inline-block">₹65,000</span></p>
+                        </div>
+                    </div>
+
+                    <div class="paper-card !bg-[#f8f9fa] p-5 md:p-6 flex items-center gap-5 hover:-translate-y-2 hover:!bg-neoCyan transition-all cursor-pointer group">
+                        <div class="w-14 h-14 hand-drawn-circle bg-white flex flex-shrink-0 items-center justify-center border-3 group-hover:bg-black group-hover:text-neoCyan transition-colors">
+                            <i class="ph-bold ph-tooth text-black text-3xl group-hover:text-neoCyan"></i>
+                        </div>
+                        <div>
+                            <p class="text-black font-display font-black text-2xl leading-none mb-2 uppercase">New Booking: Single Implant</p>
+                            <p class="text-gray-800 text-base font-bold font-hand">Confirmed via Story Link • <span class="font-black text-black bg-white px-2 border-2 border-black -rotate-2 inline-block">₹35,000</span></p>
+                        </div>
+                    </div>
+
+                    <div class="paper-card !bg-[#f8f9fa] p-5 md:p-6 flex items-center gap-5 hover:-translate-y-2 hover:!bg-neoPurple hover:text-white transition-all cursor-pointer group">
+                        <div class="w-14 h-14 hand-drawn-circle bg-white flex flex-shrink-0 items-center justify-center border-3 group-hover:bg-neoYellow transition-colors">
+                            <i class="ph-bold ph-sparkle text-black text-3xl"></i>
+                        </div>
+                        <div>
+                            <p class="text-black font-display font-black text-2xl leading-none mb-2 uppercase group-hover:text-white">New Lead: Smile Makeover</p>
+                            <p class="text-gray-800 group-hover:text-gray-200 text-base font-bold font-hand">Requested Consultation via DM</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Bento Features Section (Pop Art Grid) -->
+    <section id="platform" class="py-24 md:py-36 px-5 md:px-6 max-w-7xl mx-auto z-10 relative">
+        <div class="text-center mb-16 md:mb-24 reveal">
+            <h2 class="text-5xl md:text-7xl font-display font-black text-black mb-6 leading-tight uppercase">A COMPLETELY <span class="bg-black text-neoYellow px-4 border-4 border-neoPink shadow-[6px_6px_0_#ff007f] transform -rotate-2 inline-block">UNFAIR</span> ADVANTAGE.</h2>
+            <p class="text-gray-900 max-w-3xl mx-auto text-xl md:text-2xl font-hand font-bold">OWNIT replaces an entire social media team with engineered, theme-based systems proven to convert viewers into patients.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 auto-rows-auto md:auto-rows-[320px]" id="bento-grid">
+            <!-- Feature 1 (Span 2 cols) -->
+            <div class="paper-card md:col-span-2 p-8 md:p-10 flex flex-col justify-between reveal group bg-white hover:-translate-y-3">
+                <i class="ph-fill ph-heart double-tap-heart text-neoPink"></i>
+                <div class="absolute top-4 right-4 p-4 opacity-0 group-hover:opacity-100 group-hover:scale-125 group-hover:rotate-12 transition-all duration-500 pointer-events-none hidden sm:block">
+                    <i class="ph-fill ph-rocket-launch text-9xl text-neoYellow" style="filter: drop-shadow(4px 4px 0 #000);"></i>
+                </div>
+                <div class="relative z-10 flex flex-col h-full justify-between">
+                    <div>
+                        <span class="px-4 py-1.5 bg-neoCyan border-3 border-black font-display font-black uppercase text-sm text-black mb-6 inline-block shadow-[3px_3px_0_#000] transform -rotate-2">The Growth Engine</span>
+                        <h3 class="text-4xl md:text-5xl font-display font-black text-black mb-4 uppercase">Themed Viral Content OS</h3>
+                        <p class="text-gray-800 max-w-lg text-xl font-hand leading-relaxed font-bold">Scripts, hooks, and captions meticulously crafted around daily psychological themes for the Indian dental market. Exactly what to post, down to the minute.</p>
+                    </div>
+                    
+                    <div class="mt-8 flex flex-wrap gap-4">
+                        <span class="text-base font-display font-black uppercase px-4 py-2 bg-white border-3 border-black shadow-[3px_3px_0_#000] text-black transform rotate-2 hover:bg-neoPink hover:text-white transition-colors cursor-pointer">Day 1: Authority</span>
+                        <span class="text-base font-display font-black uppercase px-4 py-2 bg-white border-3 border-black shadow-[3px_3px_0_#000] text-black transform -rotate-2 hover:bg-neoPink hover:text-white transition-colors cursor-pointer">Day 2: Myth</span>
+                        <span class="text-base font-display font-black uppercase px-4 py-2 bg-neoYellow border-3 border-black shadow-[3px_3px_0_#000] text-black transform rotate-3 hover:bg-black hover:text-neoYellow transition-colors cursor-pointer">Day 3: Transform</span>
+                        <span class="text-base font-display font-black uppercase px-4 py-2 bg-white border-3 border-black shadow-[3px_3px_0_#000] text-black hidden sm:inline-block transform -rotate-1 hover:bg-neoPink hover:text-white transition-colors cursor-pointer">Day 4: Education</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Feature 2 -->
+            <div class="paper-card p-8 flex flex-col justify-between reveal group bg-neoYellow hover:-translate-y-3" style="transition-delay: 0.1s;">
+                <i class="ph-fill ph-heart double-tap-heart text-white"></i>
+                <div class="relative z-10 flex flex-col h-full justify-between">
+                    <div>
+                        <div class="w-16 h-16 hand-drawn-circle bg-black flex items-center justify-center mb-6 shadow-[4px_4px_0_#fff]">
+                            <i class="ph-bold ph-paper-plane-tilt text-neoYellow text-3xl group-hover:rotate-12 group-hover:scale-110 transition-transform duration-300"></i>
+                        </div>
+                        <h3 class="text-3xl md:text-4xl font-display font-black text-black mb-3 uppercase">IG DM Auto</h3>
+                        <p class="text-gray-900 text-xl font-hand font-bold leading-relaxed">Scripts that instantly transition comments into WhatsApp bookings.</p>
+                    </div>
+                    
+                    <div class="mt-6 bg-white border-3 border-black p-4 shadow-[5px_5px_0_#000] opacity-0 group-hover:opacity-100 translate-y-6 group-hover:translate-y-0 transition-all duration-500 relative transform rotate-2">
+                        <div class="absolute left-0 top-0 bottom-0 w-3 bg-neoPink border-r-3 border-black"></div>
+                        <p class="text-lg text-black font-display font-black ml-4 uppercase">"Price for veneers?"</p>
+                        <div class="flex gap-2 mt-3 items-center ml-4 bg-neoGreen w-max px-2 py-1 border-2 border-black transform -rotate-1">
+                           <i class="ph-bold ph-check text-black"></i> <p class="text-sm text-black font-display font-black uppercase">Auto-Booked</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Feature 3 -->
+            <div class="paper-card p-8 flex flex-col justify-between reveal group bg-neoPink hover:-translate-y-3" style="transition-delay: 0.2s;">
+                <i class="ph-fill ph-heart double-tap-heart text-black"></i>
+                <div class="relative z-10 flex flex-col h-full justify-between">
+                    <div>
+                        <div class="w-16 h-16 hand-drawn-circle bg-white flex items-center justify-center mb-6 shadow-[4px_4px_0_#000]">
+                            <i class="ph-bold ph-users-three text-neoPink text-3xl group-hover:scale-110 transition-transform duration-300"></i>
+                        </div>
+                        <h3 class="text-3xl md:text-4xl font-display font-black text-white mb-3 uppercase" style="text-shadow: 2px 2px 0 #000;">Local Dominance</h3>
+                        <p class="text-white text-xl font-hand font-bold leading-relaxed">Targeted engagement strategies to hijack competitors' audiences.</p>
+                    </div>
+                    
+                    <div class="mt-6 flex -space-x-4 opacity-90 group-hover:opacity-100 transition-opacity duration-300 pl-2">
+                        <div class="w-14 h-14 hand-drawn-circle bg-neoCyan flex items-center justify-center border-3 border-black"><i class="ph-bold ph-user text-black text-2xl"></i></div>
+                        <div class="w-14 h-14 hand-drawn-circle bg-neoYellow flex items-center justify-center border-3 border-black"><i class="ph-bold ph-user text-black text-2xl"></i></div>
+                        <div class="w-14 h-14 hand-drawn-circle bg-black flex items-center justify-center border-3 border-black shadow-[4px_4px_0_#fff] z-10 transform hover:scale-110 transition-transform cursor-pointer"><i class="ph-bold ph-plus text-neoGreen text-2xl font-bold"></i></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Feature 4 (Span 2 cols) -->
+            <div class="paper-card md:col-span-2 p-8 md:p-10 flex flex-col justify-between reveal group overflow-hidden bg-neoCyan hover:-translate-y-3" style="transition-delay: 0.3s;">
+                <i class="ph-fill ph-heart double-tap-heart text-white"></i>
+                <!-- Drawn background accent -->
+                <svg class="absolute -right-16 -bottom-16 w-80 h-80 text-white opacity-20 group-hover:opacity-40 transition-opacity duration-500 pointer-events-none animate-spin-slow" viewBox="0 0 100 100">
+                     <path d="M10,90 Q50,10 90,90 Z" fill="currentColor" stroke="#000" stroke-width="3" stroke-linejoin="round"/>
+                </svg>
+                
+                <div class="relative z-10 flex flex-col h-full justify-between">
+                    <!-- Interactive Floating Elements -->
+                    <div class="flex items-end gap-4 md:gap-6 mb-6 md:mb-8 translate-y-6 group-hover:translate-y-0 transition-transform duration-500">
+                        <div class="bg-white border-3 border-black p-3 md:p-4 shadow-[5px_5px_0_#000] flex items-center gap-4 transform -rotate-3">
+                            <div class="w-12 h-12 hand-drawn-circle bg-neoGreen flex items-center justify-center flex-shrink-0">
+                                <i class="ph-bold ph-trend-up text-black text-2xl"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-800 font-display font-black uppercase tracking-widest">Page Reach</p>
+                                <p class="text-black font-display font-black text-2xl md:text-3xl">+10,420%</p>
+                            </div>
+                        </div>
+                        <div class="bg-black border-3 border-black p-3 md:p-4 shadow-[5px_5px_0_#ccff00] flex items-center gap-4 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-150 transform rotate-3">
+                            <div class="w-12 h-12 hand-drawn-circle bg-neoPink flex items-center justify-center flex-shrink-0 border-white">
+                                <i class="ph-bold ph-calendar-plus text-white text-2xl"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm text-neoYellow font-display font-black uppercase tracking-widest">New Booking</p>
+                                <p class="text-white font-display font-black text-2xl md:text-3xl">₹65,000</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <span class="px-4 py-1.5 bg-black text-white border-3 border-white font-display font-black uppercase tracking-widest text-sm mb-4 md:mb-5 inline-block shadow-[4px_4px_0_#ff007f] transform rotate-1">The Ultimate Goal</span>
+                        <h3 class="text-4xl md:text-5xl font-display font-black text-black mb-4 uppercase">Reach Boosting & Bookings</h3>
+                        <p class="text-gray-900 max-w-xl text-xl font-hand font-bold leading-relaxed">Watch your Instagram reach skyrocket to millions of locals while seamlessly converting that attention into a booked-out calendar and a highly successful business.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Organic Paper "Process" Section - CREATOR VIBE -->
+    <section id="process" class="py-24 md:py-36 px-5 md:px-6 relative z-10 bg-[#f4f4f4] border-y-4 border-black">
+        <!-- The Neo Canvas -->
+        <div class="max-w-7xl mx-auto bg-white border-4 border-black rounded-[2rem] p-10 md:p-16 lg:p-24 relative shadow-[12px_16px_0px_rgba(0,0,0,1)] reveal">
+            
+            <!-- Tape/Post-it Accents -->
+            <div class="absolute -top-6 -right-4 md:-top-8 md:-right-8 bg-neoYellow px-6 py-4 shadow-[6px_6px_0_#000] rotate-6 border-3 border-black z-20 max-w-[220px] hover:scale-110 transition-transform cursor-pointer">
+                <div class="tape -top-4 left-1/2 transform -translate-x-1/2 -rotate-2"></div>
+                <p class="font-display font-black text-black text-xl uppercase leading-tight">You just record.<br>We do the rest! 🚀</p>
+            </div>
+
+            <!-- Polaroid Photo Element -->
+            <div class="absolute top-12 left-12 hidden lg:block z-20 polaroid">
+                <div class="w-40 h-40 bg-neoCyan border-3 border-black flex items-center justify-center overflow-hidden relative group cursor-pointer">
+                   <i class="ph-bold ph-camera text-5xl text-black group-hover:scale-125 transition-transform"></i>
+                   <div class="absolute inset-0 bg-neoPink mix-blend-multiply opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                </div>
+                <p class="font-hand text-center mt-4 text-3xl text-black font-black">Behind the scenes</p>
+            </div>
+
+            <div class="text-center mb-20 md:mb-28 relative z-10 lg:pl-40">
+                <span class="font-display font-black uppercase tracking-widest text-neoPurple text-xl md:text-2xl bg-neoYellow px-4 py-2 border-3 border-black shadow-[4px_4px_0_#000] -rotate-2 inline-block mb-6">100% Done-For-You Execution</span>
+                <h2 class="text-5xl md:text-7xl font-display font-black text-black mb-8 leading-tight tracking-tight uppercase">Your Full-Stack<br> Instagram Team.</h2>
+                <p class="text-gray-900 max-w-3xl mx-auto text-2xl font-hand leading-relaxed font-bold">
+                    We don't just hand you a dashboard. We act as your elite, in-house marketing agency. We handle the entire organic growth ecosystem with <span class="bg-black text-neoGreen px-2 border-2 border-neoGreen transform rotate-1 inline-block">zero ad spend</span>.
+                </p>
+            </div>
+
+            <!-- Process Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-8 relative z-10">
+                
+                <!-- Step 1 -->
+                <div class="paper-card p-8 flex flex-col relative z-10 reveal hover:-translate-y-4 -rotate-2 bg-neoCyan">
+                    <span class="font-display font-black text-white text-6xl absolute top-4 right-6 opacity-40 drop-shadow-[2px_2px_0_#000]">1</span>
+                    <div class="w-20 h-20 hand-drawn-circle border-black text-black flex items-center justify-center mb-8 bg-white shadow-[5px_5px_0_#000]">
+                        <i class="ph-bold ph-magnifying-glass text-4xl"></i>
+                    </div>
+                    <h3 class="text-3xl font-black text-black mb-4 font-display uppercase">Analyze & Research</h3>
+                    <p class="text-gray-900 text-xl leading-relaxed font-bold font-hand">We audit your local competitors, analyze regional search intent, and research the highest-converting psychological themes for your specific city.</p>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="paper-card p-8 flex flex-col relative z-10 reveal hover:-translate-y-4 rotate-2 bg-neoPink" style="transition-delay: 0.1s;">
+                    <span class="font-display font-black text-black text-6xl absolute top-4 right-6 opacity-40 drop-shadow-[2px_2px_0_#fff]">2</span>
+                    <div class="w-20 h-20 hand-drawn-circle border-black text-black flex items-center justify-center mb-8 bg-white shadow-[5px_5px_0_#000]">
+                        <i class="ph-bold ph-pen-nib text-4xl"></i>
+                    </div>
+                    <h3 class="text-3xl font-black text-white mb-4 font-display uppercase" style="text-shadow: 2px 2px 0 #000;">Write & Script</h3>
+                    <p class="text-white text-xl leading-relaxed font-bold font-hand">Our copywriters craft viral 3-second visual hooks, highly-structured patient-converting scripts, and meticulously researched SEO captions.</p>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="paper-card p-8 flex flex-col relative z-10 reveal hover:-translate-y-4 -rotate-1 bg-neoYellow" style="transition-delay: 0.2s;">
+                    <span class="font-display font-black text-white text-6xl absolute top-4 right-6 opacity-60 drop-shadow-[2px_2px_0_#000]">3</span>
+                    <div class="w-20 h-20 hand-drawn-circle border-black text-black flex items-center justify-center mb-8 bg-white shadow-[5px_5px_0_#000]">
+                        <i class="ph-bold ph-scissors text-4xl"></i>
+                    </div>
+                    <h3 class="text-3xl font-black text-black mb-4 font-display uppercase">Edit & Polish</h3>
+                    <p class="text-gray-900 text-xl leading-relaxed font-bold font-hand">Send us your raw clips. We handle professional video editing, color grading, dynamic text animations, and syncing with trending audio.</p>
+                </div>
+
+                <!-- Step 4 -->
+                <div class="paper-card p-8 flex flex-col relative z-10 reveal hover:-translate-y-4 rotate-3 bg-neoPurple" style="transition-delay: 0.3s;">
+                    <span class="font-display font-black text-black text-6xl absolute top-4 right-6 opacity-40 drop-shadow-[2px_2px_0_#fff]">4</span>
+                    <div class="w-20 h-20 hand-drawn-circle border-black text-black flex items-center justify-center mb-8 bg-white shadow-[5px_5px_0_#000]">
+                        <i class="ph-bold ph-rocket-launch text-4xl"></i>
+                    </div>
+                    <h3 class="text-3xl font-black text-white mb-4 font-display uppercase" style="text-shadow: 2px 2px 0 #000;">Manage & Market</h3>
+                    <p class="text-white text-xl leading-relaxed font-bold font-hand">We schedule posts, manage daily story retargeting, automate DM booking funnels, and execute competitor audience hijacking strategies.</p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Dynamic Pricing Section -->
+    <section id="pricing" class="py-24 md:py-36 px-5 md:px-6 relative z-10 border-t-4 border-black bg-white">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-20 md:mb-28 reveal relative">
+                
+                <h2 class="text-6xl md:text-8xl font-display font-black text-black mb-6 md:mb-8 uppercase">CHOOSE YOUR <span class="bg-black text-white px-4 border-4 border-neoYellow shadow-[6px_6px_0_#000] transform rotate-1 inline-block mt-2">DOMINANCE.</span></h2>
+                <p class="text-gray-900 max-w-3xl mx-auto text-xl md:text-2xl px-4 font-hand font-bold">Complete Done-For-You execution. We script, edit, post, and organically market. You just record.</p>
+            </div>
+
+            <!-- Pricing Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-10 max-w-6xl mx-auto">
+                
+                <!-- 30 DAY OS -->
+                <div class="paper-card p-8 md:p-10 flex flex-col relative reveal bg-white">
+                    <div class="w-full h-full flex flex-col">
+                        <div class="mb-6 md:mb-8">
+                            <h3 class="text-4xl font-display font-black text-black mb-2 uppercase">30-Day OS</h3>
+                            <p class="text-gray-700 text-xl font-hand font-bold">Establish local baseline authority.</p>
+                        </div>
+                        <div class="mb-8 md:mb-10 border-b-4 border-black border-dashed pb-8 md:pb-10 flex flex-col">
+                            <span class="text-6xl md:text-7xl font-display font-black text-black block mb-4">₹15,000</span>
+                            <div class="text-black font-display font-black uppercase text-lg bg-neoCyan inline-block px-5 py-2 border-3 border-black shadow-[4px_4px_0_#000] self-start transform -rotate-2">
+                                Just ₹500 / Video
+                            </div>
+                            <div class="mt-8 p-5 bg-[#fafafa] border-3 border-black relative overflow-hidden shadow-[4px_4px_0_#000] transform rotate-1">
+                                <div class="absolute left-0 top-0 bottom-0 w-3 bg-neoCyan border-r-3 border-black"></div>
+                                <p class="text-xl text-gray-900 leading-relaxed font-hand font-bold ml-4"><strong class="text-black font-display font-black uppercase block mb-2 text-lg">100% DFY Organic:</strong> We analyze, research, write, script, edit, post, manage, and execute pure organic marketing.</p>
+                            </div>
+                        </div>
+                        <ul class="space-y-4 md:space-y-5 mb-10 flex-1 text-xl font-hand font-bold text-gray-900">
+                            <li class="flex items-start gap-4"><i class="ph-bold ph-check text-neoCyan mt-1 text-2xl drop-shadow-[1px_1px_0_#000]"></i> Market Analyzing & Research</li>
+                            <li class="flex items-start gap-4"><i class="ph-bold ph-check text-neoCyan mt-1 text-2xl drop-shadow-[1px_1px_0_#000]"></i> 30 Viral Scripts & Writing</li>
+                            <li class="flex items-start gap-4"><i class="ph-bold ph-check text-neoCyan mt-1 text-2xl drop-shadow-[1px_1px_0_#000]"></i> Pro Video Editing & Posting</li>
+                            <li class="flex items-start gap-4"><i class="ph-bold ph-check text-neoCyan mt-1 text-2xl drop-shadow-[1px_1px_0_#000]"></i> Organic Marketing Execution</li>
+                        </ul>
+                        <a href="index-30.html" class="interactive-btn w-full py-4 md:py-5 text-center text-xl font-display bg-white hover:!bg-neoCyan">
+                            INITIALIZE ENGINE
+                        </a>
+                    </div>
+                </div>
+
+                <!-- 60 DAY OS -->
+                <div class="paper-card p-8 md:p-10 flex flex-col relative reveal md:-translate-y-6 z-20 bg-neoYellow border-4 border-black shadow-[12px_16px_0_#000] hover:shadow-[16px_20px_0_#000] !overflow-visible">
+                    
+                    <!-- Sticky Note Badge -->
+                    <div class="absolute -top-8 -right-4 md:-top-10 md:-right-8 bg-neoPink text-white border-3 border-black text-lg md:text-xl font-display font-black uppercase tracking-widest py-3 px-6 shadow-[6px_6px_0_#000] transform rotate-6 z-50 animate-pulse">
+                        <div class="tape -top-4 left-1/2 transform -translate-x-1/2 -rotate-3 bg-neoCyan"></div>
+                        ✨ MOST POPULAR
+                    </div>
+                    
+                    <div class="w-full h-full flex flex-col">
+                        <div class="mb-6 md:mb-8 relative z-10">
+                            <h3 class="text-4xl font-display font-black text-black mb-2 flex items-center uppercase"><i class="ph-bold ph-lightning mr-3 text-neoPink drop-shadow-[2px_2px_0_#000]"></i> 60-Day OS</h3>
+                            <p class="text-gray-900 text-xl font-hand font-bold">Aggressive scaling and virality.</p>
+                        </div>
+                        <div class="mb-8 md:mb-10 border-b-4 border-black pb-8 md:pb-10 relative z-10 flex flex-col">
+                            <div class="flex items-baseline gap-4 mb-2 md:mb-3 relative">
+                                <span class="text-3xl line-through text-gray-700 font-display font-black">₹27,000</span>
+                                <span class="text-base font-display font-black uppercase text-white bg-black px-3 py-1.5 border-3 border-black shadow-[3px_3px_0_#ff007f] transform -rotate-3">SAVE 20%</span>
+                            </div>
+                            <span class="text-6xl md:text-7xl font-display font-black text-black block mb-4">₹21,600</span>
+                            <div class="text-white font-display font-black uppercase text-lg bg-black inline-block px-5 py-2 border-3 border-black shadow-[4px_4px_0_#000] self-start transform rotate-2">
+                                Just ₹360 / Video
+                            </div>
+                            <div class="mt-8 p-5 bg-white border-3 border-black relative overflow-hidden shadow-[4px_4px_0_#000] transform -rotate-1">
+                                <div class="absolute left-0 top-0 bottom-0 w-3 bg-neoPink border-r-3 border-black"></div>
+                                <p class="text-xl text-gray-900 leading-relaxed font-hand font-bold ml-4"><strong class="text-black font-display font-black uppercase block mb-2 text-lg">100% DFY Organic:</strong> We analyze, research, write, script, edit, post, manage, and execute pure organic marketing.</p>
+                            </div>
+                        </div>
+                        <ul class="space-y-4 md:space-y-5 mb-10 flex-1 text-xl font-hand font-bold text-black relative z-10">
+                            <li class="flex items-start gap-4"><i class="ph-bold ph-check text-neoPink mt-1 text-2xl drop-shadow-[1px_1px_0_#000]"></i> <strong class="font-display font-black uppercase">Everything in 30-Day</strong></li>
+                            <li class="flex items-start gap-4"><i class="ph-bold ph-check text-neoPink mt-1 text-2xl drop-shadow-[1px_1px_0_#000]"></i> 60 Days DFY Editing & Posting</li>
+                            <li class="flex items-start gap-4"><i class="ph-bold ph-check text-neoPink mt-1 text-2xl drop-shadow-[1px_1px_0_#000]"></i> Competitor Hijacking Marketing</li>
+                            <li class="flex items-start gap-4"><i class="ph-bold ph-check text-neoPink mt-1 text-2xl drop-shadow-[1px_1px_0_#000]"></i> Full IG DM Automation</li>
+                        </ul>
+                        <a href="index-60.html" class="interactive-btn bg-black text-white hover:!bg-neoPink hover:text-white w-full py-4 md:py-5 text-center text-xl font-display relative z-10">
+                            DEPLOY 60-DAY SYSTEM
+                        </a>
+                    </div>
+                </div>
+
+                <!-- 90 DAY OS -->
+                <div class="paper-card p-8 md:p-10 flex flex-col relative reveal bg-white">
+                    <div class="w-full h-full flex flex-col">
+                        <div class="mb-6 md:mb-8">
+                            <h3 class="text-4xl font-display font-black text-black mb-2 uppercase">90-Day OS</h3>
+                            <p class="text-gray-700 text-xl font-hand font-bold">Full quarter market takeover.</p>
+                        </div>
+                        <div class="mb-8 md:mb-10 border-b-4 border-black border-dashed pb-8 md:pb-10 flex flex-col">
+                            <div class="flex items-baseline gap-4 mb-2 md:mb-3">
+                                <span class="text-3xl line-through text-gray-700 font-display font-black">₹36,000</span>
+                                <span class="text-base font-display font-black uppercase text-black bg-neoYellow px-3 py-1.5 border-3 border-black shadow-[3px_3px_0_#000] transform rotate-2">SAVE 20%</span>
+                            </div>
+                            <span class="text-6xl md:text-7xl font-display font-black text-black block mb-4">₹28,800</span>
+                            <div class="text-black font-display font-black uppercase text-lg bg-neoPurple text-white inline-block px-5 py-2 border-3 border-black shadow-[4px_4px_0_#000] self-start transform -rotate-2">
+                                Just ₹320 / Video
+                            </div>
+                            <div class="mt-8 p-5 bg-[#fafafa] border-3 border-black relative overflow-hidden shadow-[4px_4px_0_#000] transform rotate-1">
+                                <div class="absolute left-0 top-0 bottom-0 w-3 bg-neoPurple border-r-3 border-black"></div>
+                                <p class="text-xl text-gray-900 leading-relaxed font-hand font-bold ml-4"><strong class="text-black font-display font-black uppercase block mb-2 text-lg">100% DFY Organic:</strong> We analyze, research, write, script, edit, post, manage, and execute pure organic marketing.</p>
+                            </div>
+                        </div>
+                        <ul class="space-y-4 md:space-y-5 mb-10 flex-1 text-xl font-hand font-bold text-gray-900">
+                            <li class="flex items-start gap-4"><i class="ph-bold ph-check text-neoPurple mt-1 text-2xl drop-shadow-[1px_1px_0_#000]"></i> <strong class="font-display font-black uppercase">Everything in 60-Day</strong></li>
+                            <li class="flex items-start gap-4"><i class="ph-bold ph-check text-neoPurple mt-1 text-2xl drop-shadow-[1px_1px_0_#000]"></i> 90 Days Total Management</li>
+                            <li class="flex items-start gap-4"><i class="ph-bold ph-check text-neoPurple mt-1 text-2xl drop-shadow-[1px_1px_0_#000]"></i> High-Ticket Campaigns</li>
+                            <li class="flex items-start gap-4"><i class="ph-bold ph-check text-neoPurple mt-1 text-2xl drop-shadow-[1px_1px_0_#000]"></i> Dedicated Growth Manager</li>
+                        </ul>
+                        <a href="index-90.html" class="interactive-btn btn-primary w-full py-4 md:py-5 text-center text-xl font-display hover:!bg-neoPurple hover:text-white">
+                            DOMINATE QUARTER
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+            
+            <!-- Custom Enterprise Banner -->
+            <div class="mt-16 max-w-6xl mx-auto paper-card p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-8 reveal bg-black text-white border-4 border-black border-dashed group hover:!bg-white hover:text-black transition-colors duration-500">
+                <div class="relative z-10 text-center md:text-left flex-1">
+                    <h3 class="text-3xl md:text-4xl font-display font-black mb-4 flex flex-col sm:flex-row items-center justify-center md:justify-start gap-4 uppercase group-hover:text-black">
+                        <div class="w-16 h-16 hand-drawn-circle bg-neoCyan flex items-center justify-center shadow-[4px_4px_0_#fff] group-hover:shadow-[4px_4px_0_#000] transform -rotate-6 group-hover:rotate-12 transition-all"><i class="ph-bold ph-buildings text-black text-3xl"></i></div>
+                        Enterprise 180-Day Legacy OS
+                    </h3>
+                    <p class="text-gray-300 group-hover:text-gray-900 text-xl font-hand font-bold max-w-3xl leading-relaxed mt-4 transition-colors">Running a multi-location chain? Dominate the entire state with our 180-Day plan, including total market monopoly systems and advanced PR.</p>
+                </div>
+                <a href="index-180.html" class="interactive-btn bg-neoYellow text-black hover:!bg-neoPink hover:text-white px-10 py-5 text-2xl font-display uppercase shadow-[6px_6px_0_#fff] group-hover:shadow-[6px_6px_0_#000] transform rotate-2">
+                    ACCESS LEGACY OS
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="border-t-4 border-black bg-neoGreen py-12 md:py-16 px-6">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
+            <div class="flex items-center gap-4">
+                <div class="w-14 h-14 bg-white border-3 border-black hand-drawn-circle shadow-[4px_4px_0_#000] flex items-center justify-center transform rotate-6 hover:-rotate-12 transition-transform cursor-pointer">
+                    <i class="ph-bold ph-lightning text-black text-3xl animate-pulse"></i>
+                </div>
+                <span class="font-display font-black text-black uppercase tracking-widest text-3xl md:text-4xl">OWNIT</span>
+            </div>
+            <p class="text-xl font-hand font-bold text-black text-center md:text-left">© 2026 OWNIT Dental Systems. Rebuilding local marketing.</p>
+            <div class="flex gap-5">
+                <a href="#" class="interactive-btn w-14 h-14 text-white bg-black hover:!bg-neoPink hover:text-white"><i class="ph-bold ph-instagram-logo text-3xl"></i></a>
+                <a href="#" class="interactive-btn w-14 h-14 text-white bg-black hover:!bg-neoCyan hover:text-black"><i class="ph-bold ph-twitter-logo text-3xl"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- INTERACTIVITY SCRIPTS -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // Text Loop Animation for Hero Section - with neon color cycling
+            const words1 = ["MARKETING.", "GUESSING.", "STRUGGLING.", "WASTING TIME."];
+            const colors = ["#00ffff", "#ff007f", "#ccff00", "#8a2be2"];
+            let wordIndex = 0;
+            const textEl1 = document.getElementById('changing-text');
+            
+            setInterval(() => {
+                textEl1.style.opacity = 0;
+                textEl1.style.transform = 'translateY(15px) scale(0.9) rotate(-3deg)';
+                
+                setTimeout(() => {
+                    wordIndex = (wordIndex + 1) % words1.length;
+                    textEl1.innerText = words1[wordIndex];
+                    textEl1.style.color = colors[wordIndex];
+                    // Keep text stroke visible
+                    textEl1.style.WebkitTextStroke = '2px black';
+                    
+                    textEl1.style.opacity = 1;
+                    textEl1.style.transform = 'translateY(0) scale(1) rotate(0deg)';
+                }, 300);
+            }, 2500);
+
+            // Chart Animation Logic
+            const reachCounter = document.getElementById('reach-counter');
+            if (reachCounter) {
+                const animateCounter = (el, start, end, duration) => {
+                    let startTimestamp = null;
+                    const step = (timestamp) => {
+                        if (!startTimestamp) startTimestamp = timestamp;
+                        const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                        const easeProgress = 1 - Math.pow(1 - progress, 4); // Quartic ease out
+                        const currentVal = Math.floor(easeProgress * (end - start) + start);
+                        el.innerText = currentVal.toLocaleString();
+                        if (progress < 1) {
+                            window.requestAnimationFrame(step);
+                        }
+                    };
+                    window.requestAnimationFrame(step);
+                };
+
+                const resultsObserver = new IntersectionObserver((entries, observer) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('animate-success');
+                            const chartPath = entry.target.querySelector('.chart-path');
+                            if (chartPath) chartPath.classList.add('animate-draw');
+                            animateCounter(reachCounter, 2140, 108420, 4000); // Sped up counter
+                            observer.unobserve(entry.target);
+                        }
+                    });
+                }, { threshold: 0.3 });
+                
+                const resultsSection = document.getElementById('results-animation-container');
+                if(resultsSection) resultsObserver.observe(resultsSection);
+            }
+
+            // SCROLL REVEAL ANIMATIONS
+            const observerOptions = { root: null, rootMargin: '0px', threshold: 0.1 };
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                        observer.unobserve(entry.target); 
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+            // 3D TILT PHYSICS FOR CARDS AND MOCKUP
+            if (window.matchMedia("(hover: hover) and (min-width: 768px)").matches) {
+                const tiltWrappers = document.querySelectorAll('.tilt-wrapper');
+                tiltWrappers.forEach(wrapper => {
+                    const inner = wrapper.querySelector('.tilt-element');
+                    wrapper.addEventListener('mousemove', (e) => {
+                        const rect = wrapper.getBoundingClientRect();
+                        const x = e.clientX - rect.left; 
+                        const y = e.clientY - rect.top;  
+                        const centerX = rect.width / 2;
+                        const centerY = rect.height / 2;
+                        const rotateX = ((y - centerY) / centerY) * -10; // Increased rotation for more dramatic pop
+                        const rotateY = ((x - centerX) / centerX) * 10;
+                        inner.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.03, 1.03, 1.03)`;
+                    });
+                    wrapper.addEventListener('mouseleave', () => {
+                        inner.style.transform = `rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
+                    });
+                });
+            }
+
+            // NAVBAR BLUR & SHADOW ON SCROLL
+            const nav = document.querySelector('nav');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 20) {
+                    nav.classList.add('shadow-[0_4px_0_#000]', 'py-2');
+                    nav.classList.remove('py-4');
+                } else {
+                    nav.classList.remove('shadow-[0_4px_0_#000]', 'py-2');
+                    nav.classList.add('py-4');
+                }
+            }, { passive: true });
+        });
+    </script>
+</body>
+</html>
